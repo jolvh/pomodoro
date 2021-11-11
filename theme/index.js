@@ -62,7 +62,7 @@ const theme = extendTheme({
                 },
                 large: {
                     fontSize: "1.5rem",
-                    w: "10rem",
+                    w: "8rem",
                     h: "full"
                 }
             },
