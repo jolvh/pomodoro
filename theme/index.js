@@ -1,4 +1,5 @@
 import { extendTheme, theme as base } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools';
 
 const theme = extendTheme({
     fonts: {
@@ -8,18 +9,21 @@ const theme = extendTheme({
     colors: {
         brand: {
             white: "#ffffff",
+            offWhite: "#F5F5EB",
             black: "#111111",
             lightGray: "#555555",
-            green: "#5EC96F",
-            red: "#E35058"
+            green: "#62DA9F",
+            red: "#E35058",
+            peachy: "#FFB56C",
+            link: "#0044CC"
         }
     },
     components: {
         Heading: {
-            baseStyle: {
-                color: "brand.black",
+            baseStyle: (props) => ({
+                color: mode("brand.black", "brand.offWhite")(props),
                 fontWeight: "500"
-            },
+            }),
             sizes: {
                 base: {
                     fontSize: "2.5rem"
@@ -38,9 +42,9 @@ const theme = extendTheme({
             }
         },
         Text: {
-            baseStyle: {
-                color: "brand.lightGray"
-            },
+            baseStyle: (props) => ({
+                color: mode("brand.lightGray", "brand.offWhite")(props)
+            }),
             sizes: {
                 base: {
                     fontSize: "1rem"
@@ -52,7 +56,14 @@ const theme = extendTheme({
         },
         Button: {
             baseStyle: {
-                fontWeight: "700"
+                fontWeight: "700",
+                _focus: {
+                    ring: "none"
+                },
+                _focusVisible: {
+                    ring: "3",
+                    ringColor: "brand.link"
+                }
             },
             sizes: {
                 small: {
@@ -68,8 +79,7 @@ const theme = extendTheme({
             },
             variants: {
                 toggle: {
-                    bg: "brand.green",
-                    color: "brand.white",
+                    color: "brand.white"
                 }
             }
         }
