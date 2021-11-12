@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { HStack, VStack, Heading, Button, IconButton, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+import { HStack, VStack, Heading, Text, Button, IconButton, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import {
     Modal,
     ModalOverlay,
@@ -33,8 +33,6 @@ export default function Timer() {
 
         setStartTime(Date.now() / 1000);
         setStartSeconds(seconds);
-
-        console.log(`Init time ${startTime}`)
     }
 
     function reset() {
@@ -45,8 +43,8 @@ export default function Timer() {
 
     function save(e){
         e.preventDefault();
-        setWorkSeconds(prettyToSeconds(e.target[1].value));
-        setBreakSeconds(prettyToSeconds(e.target[2].value));
+        setWorkSeconds(parseInt(e.target[0].value) * 60 + parseInt(e.target[1].value));
+        setBreakSeconds(parseInt(e.target[2].value) * 60 + parseInt(e.target[3].value));
     }
     useEffect(() => {
         reset();
@@ -54,12 +52,6 @@ export default function Timer() {
 
     function secondsToPretty(seconds) {
         return `${Math.floor(seconds / 60).toString().padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`
-    }
-
-    function prettyToSeconds(seconds) {
-        const lame = seconds.split(':');
-
-        return parseInt(lame[0]) * 60 + parseInt(lame[1]);
     }
 
     function getDelta() {
@@ -84,10 +76,16 @@ export default function Timer() {
         setSeconds(isBreak ? breakSeconds : workSeconds);
         setStartSeconds(isBreak ? breakSeconds : workSeconds);
         setStartTime(Date.now() / 1000);
-        console.log(isBreak)
+        if (isActive && seconds === 0) {
+            playSound();
+        }
     }, [isBreak]);
 
-    //{minutes < 10 ? '0': ''}{minutes}:{seconds < 10 ? '0' : ''}{seconds}
+    function playSound() {
+        let audio = new Audio(isBreak ? '../sound/stopWork.wav' : '../sound/startWork.wav');
+        audio.volume = 0.5;
+        audio.play()   
+    }
 
     return (
         <>
@@ -102,26 +100,40 @@ export default function Timer() {
                 <ModalContent>
                     <form onSubmit={save}>
                         <ModalHeader>Set interval</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <VStack spacing="1rem">
-                                <FormControl>
+                        <ModalBody alignItems="center">
+                            <VStack py="1rem" spacing="1.5rem">
+                                <FormControl w="fit-content">
                                     <FormLabel>Work</FormLabel>
-                                    <Input id="work-time-input" type="text" maxLength="2" autoComplete="off" placeholder="25:00" onChange={e => {
-                                        if (e.target.value.length >= 2) {
-                                            document.getElementById("break-time-input").focus()
-                                        }
-                                    }}></Input>
+                                        <HStack>
+                                            <Input w="4rem" textAlign="center" id="work-minutes-input" type="number" autoComplete="off" placeholder="25" onChange={e => {
+                                                if (e.target.value.length >= 2) {
+                                                    document.getElementById("work-seconds-input").focus()
+                                                }
+                                            }}></Input>
+                                            <Text>:</Text>
+                                            <Input w="4rem" textAlign="center" id="work-seconds-input" type="number" autoComplete="off" placeholder="00" onChange={e => {
+                                                if (e.target.value.length >= 2) {
+                                                    document.getElementById("break-minutes-input").focus()
+                                                }
+                                            }}></Input>
+                                        </HStack>
                                 </FormControl>
-                                <FormControl>
+                                <FormControl w="fit-content">
                                     <FormLabel>Break</FormLabel>
-                                    <Input id="break-time-input" type="text" maxLength="2" autoComplete="off" placeholder="05:00" onChange={e => {
-                                        if (e.target.value.length >= 2) {
-                                            document.getElementById("submit-button").focus()
-                                        }
-                                    }}></Input>
+                                    <HStack>
+                                        <Input w="4rem" textAlign="center" id="break-minutes-input" type="number" autoComplete="off" placeholder="05" onChange={e => {
+                                            if (e.target.value.length >= 2) {
+                                                document.getElementById("break-seconds-input").focus()
+                                            }
+                                        }}></Input>
+                                        <Text>:</Text>
+                                        <Input w="4rem" textAlign="center" id="break-seconds-input" type="number" autoComplete="off" placeholder="00" onChange={e => {
+                                            if (e.target.value.length >= 2) {
+                                                document.getElementById("submit-button").focus()
+                                            }
+                                        }}></Input>
+                                    </HStack>
                                 </FormControl>
-                                
                             </VStack>
                         </ModalBody>
                         <ModalFooter>
