@@ -7,7 +7,7 @@ export default function Navbar() {
 
     return (
         <Flex position="fixed" w="full" p="1rem" justifyContent="flex-end">
-            <IconButton onClick={toggleColorMode} icon={icon}></IconButton>
+            <IconButton onClick={toggleColorMode} icon={icon} aria-label="Click to toggle darkmode"></IconButton>
         </Flex>
     )
 }

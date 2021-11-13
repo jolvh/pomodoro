@@ -2,6 +2,13 @@ import { extendTheme, theme as base } from "@chakra-ui/react";
 import { mode } from '@chakra-ui/theme-tools';
 
 const theme = extendTheme({
+    styles: {
+        global: {
+            body: {
+                overflow: "hidden"
+            }
+        }
+    },
     fonts: {
         heading: `DM Sans, ${base.fonts?.heading}`,
         body: `DM Sans, ${base.fonts?.body}`,
@@ -47,10 +54,10 @@ const theme = extendTheme({
             }),
             sizes: {
                 base: {
-                    fontSize: "1rem"
+                    fontSize: "0.75rem"
                 },
                 md: {
-                    fontSize: "1.5rem"
+                    fontSize: "1rem"
                 }
             }
         },

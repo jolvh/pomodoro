@@ -1,20 +1,12 @@
 import { useEffect, useState } from 'react'
-import { HStack, VStack, Heading, Text, Button, IconButton, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    FormControl,
-    FormLabel,
-    Input
-  } from "@chakra-ui/react"
+import { HStack, Heading, Button, IconButton, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { TimeIcon, RepeatClockIcon } from '@chakra-ui/icons'
+import { motion } from 'framer-motion'
+
+import IntervalForm from './intervalform'
 
 export default function Timer() {
+
     const [workSeconds, setWorkSeconds] = useState(1500);
     const [breakSeconds, setBreakSeconds] = useState(300);
     const [isBreak, setIsBreak] = useState(false);
@@ -27,6 +19,9 @@ export default function Timer() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const h2Size = useBreakpointValue({base: "4rem", sm: "6rem"});
     const buttonSize = useBreakpointValue({base: "small", md: "large"});
+
+    const MotionHeading = motion(Heading)
+    const MotionRepeatClockIcon = motion(RepeatClockIcon);
 
     function toggle() {
         setIsActive(!isActive);
@@ -68,7 +63,7 @@ export default function Timer() {
                 } else if (seconds <= 0) {
                     setIsBreak(!isBreak);
                 }
-            }, 1000);
+            }, 500);
         }
         return () => clearInterval(interval);
     }, [isActive, seconds]);
@@ -83,66 +78,26 @@ export default function Timer() {
 
     function playSound() {
         let audio = new Audio(isBreak ? '../sound/stopWork.wav' : '../sound/startWork.wav');
-        audio.volume = 0.5;
+        audio.volume = 0.4;
         audio.play()   
     }
 
     return (
         <>
-            <Heading fontFamily={`Red Hat Mono`} as="h2" variant="timer" fontSize={h2Size} color={isBreak ? "brand.red" : "brand.green"}>{secondsToPretty(seconds)}</Heading>
+            <MotionHeading
+                initial={{ opacity: .7 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: .5 }}
+                fontFamily={`Red Hat Mono`} as="h2" variant="timer" fontSize={h2Size} color={isBreak ? "brand.red" : "brand.green"}
+            >
+                {secondsToPretty(seconds)}
+            </MotionHeading>
             <HStack>
-                <IconButton onClick={onOpen} icon={<TimeIcon boxSize="1.25em" />} />
+                <IconButton onClick={onOpen} icon={<TimeIcon boxSize="1.25em" />} aria-label="Click to open timer settings" />
                 <Button onClick={toggle} variant="toggle" bg={isActive ? "brand.peachy" : "brand.green"} size={buttonSize}>{isActive ? "PAUSE" : "START"}</Button>
-                <IconButton onClick={reset} icon={<RepeatClockIcon boxSize="1.25em" />} />
+                <IconButton onClick={reset} icon={<MotionRepeatClockIcon whileHover={{ rotate: -360 }} transition={{ type: "spring", stiffness: 75 }} boxSize="1.25em"/>} aria-label="Click to reset the timer" />
+                <IntervalForm save={save} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
             </HStack>
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <form onSubmit={save}>
-                        <ModalHeader>Set interval</ModalHeader>
-                        <ModalBody alignItems="center">
-                            <VStack py="1rem" spacing="1.5rem">
-                                <FormControl w="fit-content">
-                                    <FormLabel>Work</FormLabel>
-                                        <HStack>
-                                            <Input w="4rem" textAlign="center" id="work-minutes-input" type="number" autoComplete="off" placeholder="25" onChange={e => {
-                                                if (e.target.value.length >= 2) {
-                                                    document.getElementById("work-seconds-input").focus()
-                                                }
-                                            }}></Input>
-                                            <Text>:</Text>
-                                            <Input w="4rem" textAlign="center" id="work-seconds-input" type="number" autoComplete="off" placeholder="00" onChange={e => {
-                                                if (e.target.value.length >= 2) {
-                                                    document.getElementById("break-minutes-input").focus()
-                                                }
-                                            }}></Input>
-                                        </HStack>
-                                </FormControl>
-                                <FormControl w="fit-content">
-                                    <FormLabel>Break</FormLabel>
-                                    <HStack>
-                                        <Input w="4rem" textAlign="center" id="break-minutes-input" type="number" autoComplete="off" placeholder="05" onChange={e => {
-                                            if (e.target.value.length >= 2) {
-                                                document.getElementById("break-seconds-input").focus()
-                                            }
-                                        }}></Input>
-                                        <Text>:</Text>
-                                        <Input w="4rem" textAlign="center" id="break-seconds-input" type="number" autoComplete="off" placeholder="00" onChange={e => {
-                                            if (e.target.value.length >= 2) {
-                                                document.getElementById("submit-button").focus()
-                                            }
-                                        }}></Input>
-                                    </HStack>
-                                </FormControl>
-                            </VStack>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button variant="ghost" mr={3} onClick={onClose}>Cancel</Button>
-                            <Button id="submit-button" type="submit" bg="brand.green" color="brand.white" mr={3} onClick={onClose}>Save</Button>
-                        </ModalFooter>
-                    </form>
-                </ModalContent>
-            </Modal>
         </>
     )
 }
