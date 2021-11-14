@@ -5,17 +5,11 @@ import { Container } from '@chakra-ui/react'
 import { getQuoteList, getQuote } from '../lib/quotes'
 import Pomodoro from '../components/pomodoro'
 
-const fallback = {
-  anime: "Shingeki no Kyojin",
-  quote: "Nobody can foretell the outcome, each decision you make holds meaning only by affecting your next decision",
-  character: "Erwin Smith"
-}
-
 export default function Home({ quotes }) {
-  const [quote, setQuote] = useState(fallback);
+  const [quote, setQuote] = useState("");
 
   useEffect(() => {
-    setQuote(getQuote(quotes, fallback));
+    setQuote(getQuote(quotes));
   }, [quotes])
 
   return (
