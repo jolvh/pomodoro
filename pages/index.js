@@ -16,7 +16,7 @@ export default function Home({ quotes }) {
     <>
     <Head>
       <title>Pomodoro</title>
-      <meta property="og:title" content="My page title" key="title" />
+      <meta property="og:title" content="Pomodoro" key="title" />
       <meta name="description" content="A extensive timer designed for the pomodoro technique, a time management method where you break work into intervals"/>
     </Head>
     <Container maxW="container.lg">
