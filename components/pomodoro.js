@@ -3,12 +3,12 @@ import { motion } from 'framer-motion'
 
 import Timer from './timer'
 
+const MotionHeader = motion(Heading);
+const MotionText = motion(Text);
+
 export default function Pomodoro(props) {
     const h1Size = useBreakpointValue({base: "base", sm: "sm", md: "md"})
     const pSize = useBreakpointValue({base: "base", md: "md"})
-
-    const MotionHeader = motion(Heading);
-    const MotionText = motion(Text);
 
     return (
         <>
@@ -26,7 +26,7 @@ export default function Pomodoro(props) {
                     <MotionText
                         initial={{ x: "-50%", opacity: 0 }}
                         animate={{ x: "0", opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 75, delay: .1}}
+                        transition={{ duration: .4, delay: .1}}
                         as="p" size={pSize} textAlign="center"
                     >
                         &quot;{props.quote.quote}&quot;

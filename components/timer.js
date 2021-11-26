@@ -5,6 +5,9 @@ import { motion } from 'framer-motion'
 
 import IntervalForm from './intervalform'
 
+const MotionHeading = motion(Heading)
+const MotionRepeatClockIcon = motion(RepeatClockIcon);
+
 export default function Timer() {
 
     const [workSeconds, setWorkSeconds] = useState(1500);
@@ -19,9 +22,6 @@ export default function Timer() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const h2Size = useBreakpointValue({base: "4rem", sm: "6rem"});
     const buttonSize = useBreakpointValue({base: "small", md: "large"});
-
-    const MotionHeading = motion(Heading)
-    const MotionRepeatClockIcon = motion(RepeatClockIcon);
 
     function toggle() {
         setIsActive(!isActive);
