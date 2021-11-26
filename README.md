@@ -1,5 +1,5 @@
 ## About
-[(pomodoro-jolvh.vercel.app)]
+Live site link: https://pomodoro-jolvh.vercel.app/
 This is a simple and subtle pomodoro timer to help track your pomodoros. It uses sound queues to notify when a cycle ends as well as begins. The cycles are easily customizable through entry by form.
 
 ## Quotes
